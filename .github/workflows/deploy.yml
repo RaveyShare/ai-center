@@ -41,7 +41,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./ai-center
           file: ./ai-center/Dockerfile
           platforms: linux/amd64
           push: true
@@ -61,10 +61,10 @@ jobs:
             docker login ${{ env.ALIYUN_REGISTRY }} -u "${{ secrets.ALIYUN_USERNAME }}" -p "${{ secrets.ALIYUN_PASSWORD }}"
             cd /opt/ai-center
             if [ ! -f .env ]; then
+              echo "Error: .env file not found"
               exit 1
             fi
             docker compose pull
             docker compose up -d
             docker compose ps
             docker compose logs --tail=50 ai-center
-
