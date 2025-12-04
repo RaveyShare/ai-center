@@ -41,7 +41,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./ai-center
+          context: .
           file: ./ai-center/Dockerfile
           platforms: linux/amd64
           push: true
