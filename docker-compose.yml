@@ -1,0 +1,12 @@
+services:
+  ai-center:
+    image: ${ALIYUN_REGISTRY}/ravey-prod/ai-center:latest
+    container_name: ai-center
+    restart: always
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    ports:
+      - "8001:8001"
+
