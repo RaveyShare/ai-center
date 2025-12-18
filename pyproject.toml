@@ -13,8 +13,10 @@ dependencies = [
   "langchain-core>=1.1,<2",
   "langchain-openai>=1.1,<2",
   "langchain-anthropic>=1.1,<2",
+  "langchain-google-genai>=1.0,<2",
   "tiktoken>=0.7,<1",
   "openai>=1.0.0",
   "anthropic>=0.40.0",
+  "nacos-sdk-python>=2.1.0",
 ]
 
