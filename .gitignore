@@ -1,36 +1,69 @@
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
+.Python
 build/
+develop-eggs/
 dist/
+downloads/
+eggs/
 .eggs/
-*.egg-info/
+lib/
+lib64/
+parts/
+sdist/
+var/
 wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
 .venv/
 venv/
 ENV/
 env/
-.python-version
-Pipfile.lock
-poetry.lock
-.pytest_cache/
-.tox/
-.nox/
-.mypy_cache/
-.coverage
-.coverage.*
-coverage.xml
-htmlcov/
-junit.xml
-.cache/
-logs/
-*.log
-.ipynb_checkpoints/
-.idea/
+
+# UV
+.uv/
+
+# IDEs
 .vscode/
+.idea/
+*.swp
+*.swo
+*~
 .DS_Store
-Thumbs.db
+
+# Environment variables
 .env
-.env.*
+.env.local
+.env.*.local
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+
+# Type checking
+.mypy_cache/
+.pytype/
+.pyre/
+
+# Documentation
 docs/_build/
+
+# LangSmith
+.langsmith/

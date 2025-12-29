@@ -1,0 +1,132 @@
+# BMAD Method v6 - Workflow Status Tracker
+# Project: ai-center
+# Type: api
+# Level: 2 (Medium - 5-15 stories)
+# Last Updated: 2025-12-29T00:00:00Z
+
+# Status values: not_started | in_progress | completed | skipped
+# Requirement values: required | recommended | optional
+
+project_metadata:
+  name: "ai-center"
+  type: "api"
+  level: 2
+  initialized: "2025-12-29T00:00:00Z"
+  last_updated: "2025-12-29T00:00:00Z"
+
+# Phase 1: Discovery & Planning
+phase_1_discovery:
+  research:
+    status: "not_started"
+    requirement: "optional"
+    output_file: null
+    notes: "Market research, competitive analysis, user research"
+
+  brainstorm:
+    status: "not_started"
+    requirement: "optional"
+    output_file: null
+    notes: "Ideation sessions, solution exploration"
+
+  product_brief:
+    status: "completed"
+    requirement: "recommended"
+    output_file: "docs/product-brief.md"
+    notes: "Product brief completed and validated"
+
+
+# Phase 2: Requirements & Design
+phase_2_requirements:
+  prd:
+    status: "not_started"
+    requirement: "required"
+    output_file: null
+    notes: "Product Requirements Document - REQUIRED for Level 2+"
+
+  tech_spec:
+    status: "not_started"
+    requirement: "optional"
+    output_file: null
+    notes: "Technical specification (optional when PRD exists)"
+
+  ux_design:
+    status: "not_started"
+    requirement: "optional"
+    output_file: null
+    notes: "User experience and interface design"
+
+# Phase 3: Architecture & Planning
+phase_3_architecture:
+  architecture:
+    status: "not_started"
+    requirement: "required"
+    output_file: null
+    notes: "System architecture document - REQUIRED for Level 2+"
+
+  solutioning_gate:
+    status: "not_started"
+    requirement: "optional"
+    output_file: null
+    notes: "Architecture review and validation checkpoint"
+
+# Phase 4: Execution
+phase_4_execution:
+  sprint_planning:
+    status: "not_started"
+    requirement: "required"
+    output_file: null
+    notes: "Break down work into stories and sprints"
+    sprints: []
+
+  stories:
+    status: "not_started"
+    requirement: "required"
+    total_stories: 0
+    completed_stories: 0
+    story_list: []
+    notes: "Individual development stories"
+
+# Workflow Path for Level 2
+recommended_path:
+  - step: 1
+    phase: "Discovery"
+    workflow: "product-brief"
+    requirement: "recommended"
+    description: "Create high-level project overview"
+
+  - step: 2
+    phase: "Requirements"
+    workflow: "prd"
+    requirement: "required"
+    description: "Define detailed product requirements"
+
+  - step: 3
+    phase: "Architecture"
+    workflow: "architecture"
+    requirement: "required"
+    description: "Design system architecture"
+
+  - step: 4
+    phase: "Execution"
+    workflow: "sprint-planning"
+    requirement: "required"
+    description: "Break down into executable stories"
+
+# Overall Progress
+progress:
+  current_phase: "phase_1_discovery"
+  current_step: "product_brief"
+  completion_percentage: 0
+  required_completed: 0
+  required_total: 3
+  recommended_completed: 0
+  recommended_total: 1
+
+# Notes
+notes: |
+  Level 2 projects require:
+  - PRD (Product Requirements Document)
+  - Architecture document
+  - Sprint planning with 5-15 stories
+
+  Recommended to start with product-brief for clarity.

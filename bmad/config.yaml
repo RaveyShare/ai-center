@@ -1,0 +1,38 @@
+# BMAD Method v6 - Project Configuration
+# Generated: 2025-12-29
+
+project_name: "ai-center"
+project_type: "api"
+project_level: 2
+
+# Output configuration
+output_folder: "docs"
+
+# BMAD Method Workflow tracking
+bmm:
+  workflow_status_file: "docs/bmm-workflow-status.yaml"
+  sprint_status_file: "docs/sprint-status.yaml"
+
+# Project paths
+paths:
+  docs: "docs"
+  stories: "docs/stories"
+  tests: "tests"
+  src: "src"
+
+# Agent overrides (optional)
+# Place custom agent instructions in bmad/agent-overrides/
+agent_overrides:
+  enabled: true
+  directory: "bmad/agent-overrides"
+
+# Workflow preferences
+workflows:
+  auto_save: true
+  backup_previous: true
+
+# Documentation preferences
+documentation:
+  format: "markdown"
+  include_timestamps: true
+  include_metadata: true
