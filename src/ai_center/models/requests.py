@@ -79,6 +79,26 @@ class ClassificationRequest(BaseModel):
         }
 
 
+class UnderstandingRequest(BaseModel):
+    title: Optional[str] = Field(None, description="杏仁标题")
+    content: Optional[str] = Field(None, description="杏仁内容")
+    text: Optional[str] = Field(None, description="用户原始输入（一段话）")
+    task_id: Optional[int] = Field(None, description="任务 ID")
+    user_id: Optional[int] = Field(None, description="用户 ID")
+
+    context: Optional[str] = Field(None, description="额外上下文信息")
+
+    model: Optional[str] = Field(None, description="指定使用的模型")
+    temperature: Optional[float] = Field(None, description="温度参数", ge=0, le=2)
+    max_tokens: Optional[int] = Field(None, description="最大 token 数")
+
+    @model_validator(mode="after")
+    def validate_input(self):
+        if not (self.title or self.content or self.text):
+            raise ValueError("title/content/text 至少提供一个")
+        return self
+
+
 class EvolutionRequest(BaseModel):
     """演化分析请求"""
 

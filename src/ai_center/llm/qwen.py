@@ -8,7 +8,11 @@ import dashscope
 from dashscope import Generation
 from tenacity import retry, stop_after_attempt, wait_exponential
 
+from ..utils.logger import get_logger
 from .base import BaseLLM, LLMConfig, LLMResponse
+
+
+logger = get_logger(__name__)
 
 
 class QwenLLM(BaseLLM):
@@ -38,6 +42,11 @@ class QwenLLM(BaseLLM):
 
         # 合并配置
         model = kwargs.get("model", self.config.model)
+        
+        # 自动转换模型名称为小写（容错处理）
+        if isinstance(model, str) and model.lower().startswith("qwen"):
+            model = model.lower()
+
         if isinstance(model, str) and model.startswith("qwen3-") and "-instruct" in model:
             model = re.sub(r"-instruct(?:-[\w]+)?$", "", model)
 
@@ -53,9 +62,11 @@ class QwenLLM(BaseLLM):
             params["enable_thinking"] = False
 
         try:
+            logger.info(f"Calling Qwen API with params: {json.dumps(params, ensure_ascii=False, default=str)}")
             response = Generation.call(**params)
 
             if response.status_code != 200:
+                logger.error(f"Qwen API returned error: {response.code} - {response.message}\nFull response: {response}")
                 raise RuntimeError(f"Qwen API error: {response.code} - {response.message}")
 
             content = response.output.choices[0].message.content
@@ -66,6 +77,7 @@ class QwenLLM(BaseLLM):
             }
 
             cost_time = int((time.time() - start_time) * 1000)
+            logger.info(f"Qwen API call successful. Cost: {cost_time}ms. Usage: {usage}")
 
             try:
                 raw_response = response.to_dict()
@@ -81,6 +93,7 @@ class QwenLLM(BaseLLM):
             )
 
         except Exception as e:
+            logger.exception("Failed to call Qwen API")
             raise RuntimeError(f"Failed to call Qwen API: {str(e)}") from e
 
     async def generate_structured(

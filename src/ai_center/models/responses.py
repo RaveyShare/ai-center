@@ -52,6 +52,28 @@ class ClassificationResult(AnalysisResult):
         }
 
 
+class UnderstandingCore(BaseModel):
+    entity: str = Field("", description="对象/主体")
+    action: str = Field("", description="动作/行为")
+    context: str = Field("", description="场景/原因/约束")
+
+
+class UnderstandingResult(BaseModel):
+    success: bool = Field(..., description="是否成功")
+    confidence: float = Field(..., description="置信度", ge=0, le=1)
+    reasoning: str = Field(..., description="分析理由")
+    recommended_status: str = Field(..., description="推荐状态")
+
+    title: Optional[str] = Field(None, description="生成标题")
+    clarified_text: Optional[str] = Field(None, description="澄清文本")
+    tags: Optional[list[str]] = Field(None, description="标签列表")
+    core: Optional[UnderstandingCore] = Field(None, description="核心信息抽取")
+
+    model: str = Field(..., description="使用的模型")
+    cost_time: int = Field(..., description="耗时（毫秒）")
+    error_message: Optional[str] = Field(None, description="错误信息")
+
+
 class EvolutionResult(AnalysisResult):
     """演化分析结果"""
 

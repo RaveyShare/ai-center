@@ -4,6 +4,7 @@ from typing import Optional
 from ..config import Settings
 from .base import BaseLLM, LLMConfig
 from .qwen import QwenLLM
+from .openai import OpenAILLM
 
 
 class LLMFactory:
@@ -45,16 +46,15 @@ class LLMFactory:
             instance = QwenLLM(config)
 
         elif provider == "openai":
-            # 预留 OpenAI 实现
+            # OpenAI 实现
             config = LLMConfig(
-                model=model or "gpt-4",
+                model=model or settings.llm_model, # 使用配置中的模型名，如果调用方没指定
                 temperature=settings.llm_temperature,
                 max_tokens=settings.llm_max_tokens,
-                api_key=settings.openai_api_key,
+                api_key=settings.openai_api_key or "dummy", # 本地模型通常不需要 key
                 base_url=settings.openai_base_url
             )
-            # instance = OpenAILLM(config)
-            raise NotImplementedError("OpenAI provider not implemented yet")
+            instance = OpenAILLM(config)
 
         elif provider == "claude":
             # 预留 Claude 实现

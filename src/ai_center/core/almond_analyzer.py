@@ -6,12 +6,14 @@ from typing import Optional
 from ..config import Settings
 from ..llm.base import BaseLLM
 from ..llm.factory import LLMFactory
-from ..llm.prompts import classification, evolution, retrospect, enrichment
+from ..llm.prompts import classification, evolution, retrospect, enrichment, understanding
 from ..models.enums import AnalysisType
 from ..models.responses import (
     ClassificationResult,
     EvolutionResult,
-    RetrospectResult
+    RetrospectResult,
+    UnderstandingResult,
+    UnderstandingCore
 )
 
 
@@ -136,6 +138,84 @@ class AlmondAnalyzer:
                 model=model or self.settings.llm_model,
                 cost_time=cost_time,
                 error_message=str(root_error)
+            )
+
+    async def understand(
+        self,
+        title: Optional[str] = None,
+        content: Optional[str] = None,
+        text: Optional[str] = None,
+        context: str = "",
+        model: Optional[str] = None,
+        temperature: Optional[float] = None,
+        max_tokens: Optional[int] = None
+    ) -> UnderstandingResult:
+        start_time = time.time()
+
+        try:
+            source_text = (text or content or title or "").strip()
+            resolved_title = (title or "").strip()
+            resolved_content = (content or "").strip()
+
+            llm = self._get_llm(model)
+
+            if (not resolved_title) or (not resolved_content):
+                enrich_response = await llm.generate_structured(
+                    prompt=enrichment.build_enrich_title_content_prompt(source_text),
+                    system_prompt=enrichment.ENRICH_TITLE_CONTENT_SYSTEM_PROMPT,
+                    temperature=0.2,
+                    max_tokens=300
+                )
+                enrich_dict = json.loads(enrich_response.content)
+                if not resolved_title:
+                    resolved_title = str(enrich_dict.get("title", "")).strip() or source_text[:16]
+                if not resolved_content:
+                    resolved_content = str(enrich_dict.get("content", "")).strip() or source_text
+
+            response = await llm.generate_structured(
+                prompt=understanding.build_understanding_prompt(source_text),
+                system_prompt=None,
+                temperature=temperature if temperature is not None else 0.2,
+                max_tokens=max_tokens if max_tokens is not None else 400
+            )
+            result_dict = json.loads(response.content)
+
+            cost_time = int((time.time() - start_time) * 1000)
+
+            core_dict = result_dict.get("core") or {}
+            core = UnderstandingCore(
+                entity=str(core_dict.get("entity", "") or ""),
+                action=str(core_dict.get("action", "") or ""),
+                context=str(core_dict.get("context", "") or "")
+            )
+
+            return UnderstandingResult(
+                success=True,
+                confidence=float(result_dict.get("confidence", 0.5)),
+                reasoning=str(result_dict.get("reasoning", "") or ""),
+                recommended_status="understood",
+                title=str(result_dict.get("title", "") or resolved_title).strip() or None,
+                clarified_text=str(result_dict.get("clarified_text", "") or "").strip() or None,
+                tags=result_dict.get("tags"),
+                core=core,
+                model=response.model,
+                cost_time=cost_time
+            )
+
+        except Exception as e:
+            cost_time = int((time.time() - start_time) * 1000)
+            return UnderstandingResult(
+                success=False,
+                confidence=0.0,
+                reasoning="分析失败",
+                recommended_status="new",
+                title=(title or "").strip() or (text or "").strip()[:16] or None,
+                clarified_text=None,
+                tags=None,
+                core=None,
+                model=model or self.settings.llm_model,
+                cost_time=cost_time,
+                error_message=str(e)
             )
     
     async def analyze_evolution(

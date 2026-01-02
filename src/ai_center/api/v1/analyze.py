@@ -7,11 +7,13 @@ from ...core.almond_analyzer import AlmondAnalyzer
 from ...models.requests import (
     AnalyzeRequest,
     ClassificationRequest,
+    UnderstandingRequest,
     EvolutionRequest,
     RetrospectRequest
 )
 from ...models.responses import (
     ClassificationResult,
+    UnderstandingResult,
     EvolutionResult,
     RetrospectResult
 )
@@ -59,6 +61,15 @@ async def analyze(
     try:
         if request.analysis_type == AnalysisType.CLASSIFICATION:
             return await analyzer.classify(
+                title=request.title,
+                content=request.content,
+                text=request.text,
+                model=request.model,
+                temperature=request.temperature,
+                max_tokens=request.max_tokens
+            )
+        elif request.analysis_type == AnalysisType.UNDERSTANDING:
+            return await analyzer.understand(
                 title=request.title,
                 content=request.content,
                 text=request.text,
@@ -138,6 +149,48 @@ async def classify(
     except Exception as e:
         logger.error(
             f"Classification failed: {str(e)}",
+            extra={"task_id": request.task_id},
+            exc_info=True
+        )
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post(
+    "/analyze/understanding",
+    response_model=UnderstandingResult,
+    summary="理解澄清",
+    description="为原始输入生成 title、clarified_text、tags，并返回 confidence"
+)
+async def understanding_api(
+    request: UnderstandingRequest,
+    settings: Settings = Depends(get_settings),
+    _: None = Depends(verify_token)
+) -> UnderstandingResult:
+    logger.info(
+        f"Understanding request: task_id={request.task_id}, user_id={request.user_id}",
+        extra={"task_id": request.task_id, "user_id": request.user_id}
+    )
+
+    analyzer = AlmondAnalyzer(settings)
+
+    try:
+        result = await analyzer.understand(
+            title=request.title,
+            content=request.content,
+            text=request.text,
+            context=request.context or "",
+            model=request.model,
+            temperature=request.temperature,
+            max_tokens=request.max_tokens
+        )
+        logger.info(
+            f"Understanding result: confidence={result.confidence}",
+            extra={"task_id": request.task_id, "confidence": result.confidence}
+        )
+        return result
+    except Exception as e:
+        logger.error(
+            f"Understanding failed: {str(e)}",
             extra={"task_id": request.task_id},
             exc_info=True
         )
