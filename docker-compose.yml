@@ -1,12 +1,25 @@
 services:
   ai-center:
-    image: ${ALIYUN_REGISTRY}/ravey-prod/ai-center:latest
-    container_name: ai-center
-    restart: always
+    build: .
+    image: almond-ai-center:local
+    container_name: almond-ai-center
+    restart: unless-stopped
+    env_file:
+      - .env
     environment:
-      - JWT_SECRET=${JWT_SECRET}
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL_DOCKER:-http://host.docker.internal:1234/v1}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-lm-studio}
+      NO_PROXY: ${NO_PROXY_DOCKER:-localhost,127.0.0.1,host.docker.internal}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
-      - "8001:8001"
+      - "8000:8000"
+    networks:
+      - almond_net
 
+networks:
+  almond_net:
+    external: true
+    name: almond_almond_net
