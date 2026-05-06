@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: ravey-ai-tasks
+Version: 0.1.0
+Summary: Babycare AI 任务规划 Agent 应用
+Requires-Python: >=3.11
+Requires-Dist: ravey-ai-agent-framework
+Requires-Dist: fastapi>=0.115.0
+Requires-Dist: uvicorn[standard]>=0.32.0
+Requires-Dist: pyyaml>=6.0

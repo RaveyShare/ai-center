@@ -1,0 +1,38 @@
+# ============================================================
+# Babycare AI Agent —— 应用配置（业务开发者只需要关心这个文件）
+# ============================================================
+
+# HTTP 服务
+server:
+  port: 8000
+  title: "Babycare AI Agent API"
+  version: "1.0.0"
+
+# LLM 提供商
+llm:
+  providers:
+    dashscope:
+      api_key: ${DASHSCOPE_API_KEY}
+      base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+      default_model: "qwen-plus"
+      fast_model: "qwen-turbo"
+
+# Session Store —— append-only 事件日志，独立于 Brain 的持久层
+session:
+  type: mysql
+  host: ${MYSQL_HOST:127.0.0.1}
+  port: ${MYSQL_PORT:3306}
+  user: ${MYSQL_USER:langgraph}
+  password: ${MYSQL_PASSWORD:langgraph123}
+  database: ${MYSQL_DATABASE:langgraph_sessions}
+
+# 业务输出目录（任务规划 JSON 的落地路径）
+output_dir: "./output"
+
+# 可观测性
+trace:
+  enabled: false
+  provider: langfuse
+  public_key: ${LANGFUSE_PUBLIC_KEY}
+  secret_key: ${LANGFUSE_SECRET_KEY}
+  host: ${LANGFUSE_HOST:http://localhost:3000}

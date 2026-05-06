@@ -1,0 +1,26 @@
+Metadata-Version: 2.4
+Name: ravey-ai-agent-framework
+Version: 0.1.0
+Summary: Babycare AI Agent 工程脚手架（基于 LangGraph）
+Requires-Python: >=3.11
+Requires-Dist: langgraph>=0.4.0
+Requires-Dist: langchain-core>=0.3.0
+Requires-Dist: langchain-openai>=0.3.0
+Requires-Dist: langgraph-checkpoint-mysql>=3.0.0
+Requires-Dist: PyMySQL>=1.1.0
+Requires-Dist: cryptography>=42.0.0
+Requires-Dist: langfuse>=2.50.0
+Requires-Dist: fastapi>=0.115.0
+Requires-Dist: uvicorn[standard]>=0.32.0
+Requires-Dist: pydantic>=2.5.0
+Requires-Dist: pydantic-settings>=2.5.0
+Requires-Dist: httpx>=0.28.0
+Requires-Dist: pyyaml>=6.0
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: structlog>=24.0.0
+Requires-Dist: redis>=5.0.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.24.0; extra == "dev"
+Requires-Dist: pytest-cov>=5.0.0; extra == "dev"
+Requires-Dist: ruff>=0.8.0; extra == "dev"

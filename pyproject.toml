@@ -1,0 +1,24 @@
+[project]
+name = "ravey-ai-workspace"
+version = "0.1.0"
+description = "Babycare AI Agent monorepo —— 框架 + 业务 Agent"
+requires-python = ">=3.11"
+# 顶层不直接装包，所有可安装包都在 packages/* 下声明
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=5.0.0",
+    "ruff>=0.8.0",
+]
+
+# uv workspace 配置：所有 packages/* 都视为成员，相互之间用源码引用
+[tool.uv.workspace]
+members = ["packages/*"]
+
+# 业务包通过 source = workspace 引用框架包，开发时实时生效
+[tool.uv.sources]
+ravey-ai-agent-framework = { workspace = true }
+ravey-ai-tasks = { workspace = true }
